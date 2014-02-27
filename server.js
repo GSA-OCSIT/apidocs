@@ -36,7 +36,8 @@ var express     = require('express'),
     redis       = require('redis'),
     RedisStore  = require('connect-redis')(express);
 
-require('express-namespace');
+
+
 // Configuration
 try {
     var configJSON = fs.readFileSync(__dirname + "/config.json");
@@ -45,6 +46,7 @@ try {
     console.error("File config.json not found or is invalid.  Try: `cp config.json.sample config.json`");
     process.exit(1);
 }
+
 
 //
 // Redis connection
