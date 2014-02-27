@@ -658,43 +658,41 @@ app.dynamicHelpers({
 //
 // Routes
 //
-app.namespace('/api-docs', function(){
-    app.get('/', function(req, res) {
-        res.render('listAPIs', {
-            title: config.title
-        });
+app.get('/', function(req, res) {
+    res.render('listAPIs', {
+        title: config.title
     });
+});
 
-    // Process the API request
-    app.post('/processReq', oauth, processRequest, function(req, res) {
-        var result = {
-            headers: req.resultHeaders,
-            response: req.result,
-            call: req.call
-        };
+// Process the API request
+app.post('/processReq', oauth, processRequest, function(req, res) {
+    var result = {
+        headers: req.resultHeaders,
+        response: req.result,
+        call: req.call
+    };
 
-        res.send(result);
+    res.send(result);
+});
+
+// Just auth
+app.all('/auth', oauth);
+
+// OAuth callback page, closes the window immediately after storing access token/secret
+app.get('/authSuccess/:api', oauthSuccess, function(req, res) {
+    res.render('authSuccess', {
+        title: 'OAuth Successful'
     });
+});
 
-    // Just auth
-    app.all('/auth', oauth);
+app.post('/upload', function(req, res) {
+  console.log(req.body.user);
+  res.redirect('back');
+});
 
-    // OAuth callback page, closes the window immediately after storing access token/secret
-    app.get('/authSuccess/:api', oauthSuccess, function(req, res) {
-        res.render('authSuccess', {
-            title: 'OAuth Successful'
-        });
-    });
-
-    app.post('/upload', function(req, res) {
-      console.log(req.body.user);
-      res.redirect('back');
-    });
-
-    // API shortname, all lowercase
-    app.get('/:api([^\.]+)', function(req, res) {
-        res.render('api');
-    });
+// API shortname, all lowercase
+app.get('/:api([^\.]+)', function(req, res) {
+    res.render('api');
 });
 
 // Only listen on $ node app.js
